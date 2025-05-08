@@ -2,6 +2,7 @@ package mate.academy.carsharing.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.carsharing.dto.car.CarRequestDto;
 import mate.academy.carsharing.dto.car.CarResponseDto;
@@ -40,7 +41,7 @@ public class CarController {
     @Operation(summary = "Create a new car",
             description = "Create a new car with the provided details")
     @PostMapping
-    public CarResponseDto createCar(@RequestBody CarRequestDto carRequestDto) {
+    public CarResponseDto createCar(@RequestBody @Valid CarRequestDto carRequestDto) {
         return carService.createCar(carRequestDto);
     }
 
@@ -58,7 +59,7 @@ public class CarController {
             description = "Update an existing car with new data")
     @PutMapping("/{carId}")
     public CarResponseDto updateById(@PathVariable Long carId,
-                                     @RequestBody CarRequestDto carRequestDto) {
+                                     @RequestBody @Valid CarRequestDto carRequestDto) {
         return carService.updateById(carId, carRequestDto);
     }
 

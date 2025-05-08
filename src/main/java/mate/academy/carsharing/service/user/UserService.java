@@ -3,7 +3,7 @@ package mate.academy.carsharing.service.user;
 import mate.academy.carsharing.dto.role.RoleNameRequestDto;
 import mate.academy.carsharing.dto.user.UserRegistrationRequestDto;
 import mate.academy.carsharing.dto.user.UserResponseDto;
-import mate.academy.carsharing.exceptions.RegistrationException;
+import mate.academy.carsharing.exception.RegistrationException;
 
 public interface UserService {
     UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)

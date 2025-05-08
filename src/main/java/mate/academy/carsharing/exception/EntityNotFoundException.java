@@ -1,4 +1,4 @@
-package mate.academy.carsharing.exceptions;
+package mate.academy.carsharing.exception;
 
 public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException(String message) {

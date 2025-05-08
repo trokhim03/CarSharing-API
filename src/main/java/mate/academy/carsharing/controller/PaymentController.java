@@ -2,6 +2,7 @@ package mate.academy.carsharing.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.carsharing.dto.payment.PaymentRequestDto;
 import mate.academy.carsharing.dto.payment.PaymentResponseDto;
@@ -38,7 +39,8 @@ public class PaymentController {
     @Operation(summary = "Create payment",
             description = "Create a new payment session for rental")
     @PostMapping
-    public PaymentResponseDto createPayment(@RequestBody PaymentRequestDto paymentRequestDto) {
+    public PaymentResponseDto createPayment(@RequestBody
+                                                @Valid PaymentRequestDto paymentRequestDto) {
         return paymentService.createPayment(paymentRequestDto);
     }
 

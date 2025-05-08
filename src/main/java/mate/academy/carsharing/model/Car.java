@@ -37,7 +37,6 @@ public class Car {
     @Column(nullable = false)
     private Type type;
 
-    @Column(nullable = false)
     private int inventory;
 
     @Column(name = "daily_fee", nullable = false)

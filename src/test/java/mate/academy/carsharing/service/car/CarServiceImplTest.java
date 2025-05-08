@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import mate.academy.carsharing.dto.car.CarRequestDto;
 import mate.academy.carsharing.dto.car.CarResponseDto;
-import mate.academy.carsharing.exceptions.EntityNotFoundException;
+import mate.academy.carsharing.exception.EntityNotFoundException;
 import mate.academy.carsharing.mapper.CarMapper;
 import mate.academy.carsharing.model.Car;
 import mate.academy.carsharing.repository.CarRepository;

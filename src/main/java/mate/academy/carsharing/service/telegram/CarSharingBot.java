@@ -1,6 +1,6 @@
 package mate.academy.carsharing.service.telegram;
 
-import mate.academy.carsharing.exceptions.TelegramNotificationException;
+import mate.academy.carsharing.exception.TelegramNotificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;

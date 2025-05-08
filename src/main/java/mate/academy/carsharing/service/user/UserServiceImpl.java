@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import mate.academy.carsharing.dto.role.RoleNameRequestDto;
 import mate.academy.carsharing.dto.user.UserRegistrationRequestDto;
 import mate.academy.carsharing.dto.user.UserResponseDto;
-import mate.academy.carsharing.exceptions.EntityNotFoundException;
-import mate.academy.carsharing.exceptions.RegistrationException;
+import mate.academy.carsharing.exception.EntityNotFoundException;
+import mate.academy.carsharing.exception.RegistrationException;
 import mate.academy.carsharing.mapper.UserMapper;
 import mate.academy.carsharing.model.Role;
 import mate.academy.carsharing.model.User;
@@ -38,7 +38,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userRegistrationRequestDto.getPassword()));
 
         Role defaultRole = roleRepository.findByName(Role.RoleName.CUSTOMER)
-                .orElseThrow(() -> new EntityNotFoundException("Default role not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Role "
+                        + Role.RoleName.CUSTOMER.name() + " not found"));
         user.setRoles(Set.of(defaultRole));
         userRepository.save(user);
         return userMapper.toUserResponse(user);

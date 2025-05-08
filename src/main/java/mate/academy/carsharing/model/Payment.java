@@ -42,14 +42,14 @@ public class Payment {
     private Rental rental;
 
     @Lob
-    @Column(name = "session_url", nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String sessionUrl;
 
     @Lob
-    @Column(name = "session_id", nullable = false, unique = true, columnDefinition = "TEXT")
+    @Column(nullable = false, unique = true, columnDefinition = "TEXT")
     private String sessionId;
 
-    @Column(name = "amount_to_pay", nullable = false)
+    @Column(nullable = false)
     private BigDecimal amountToPay;
 
     @Column(nullable = false)

@@ -2,6 +2,7 @@ package mate.academy.carsharing.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.carsharing.dto.role.RoleNameRequestDto;
 import mate.academy.carsharing.dto.user.UserRegistrationRequestDto;
@@ -39,7 +40,7 @@ public class UserController {
             description = "Update user's role (Admin only)")
     @PutMapping("/update/{userId}/role")
     public UserResponseDto updateRole(@PathVariable Long userId,
-                                      @RequestBody RoleNameRequestDto roleNameRequestDto) {
+                                      @RequestBody @Valid RoleNameRequestDto roleNameRequestDto) {
         return userService.updateUserRole(userId, roleNameRequestDto);
     }
 
@@ -49,7 +50,7 @@ public class UserController {
     @PutMapping("/me")
     public UserResponseDto updateUserInfo(
             Authentication authentication,
-            @RequestBody UserRegistrationRequestDto userRegistrationRequestDto) {
+            @RequestBody @Valid UserRegistrationRequestDto userRegistrationRequestDto) {
         Long authenticationUserId = getAuthenticationUserId(authentication);
         return userService.updateMe(authenticationUserId, userRegistrationRequestDto);
     }

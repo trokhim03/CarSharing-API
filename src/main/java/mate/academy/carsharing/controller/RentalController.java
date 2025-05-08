@@ -2,6 +2,7 @@ package mate.academy.carsharing.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.carsharing.dto.rental.RentalRequestDto;
 import mate.academy.carsharing.dto.rental.RentalResponseDto;
@@ -36,7 +37,7 @@ public class RentalController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public RentalResponseDto createRental(Authentication authentication,
-                                          @RequestBody RentalRequestDto rentalRequestDto) {
+                                          @RequestBody @Valid RentalRequestDto rentalRequestDto) {
         Long userId = getAuthenticationUserId(authentication);
         return rentalService.createRental(userId, rentalRequestDto);
     }
@@ -67,7 +68,7 @@ public class RentalController {
             description = "Set actual return date and process rental completion")
     @PostMapping("/return")
     public RentalResponseDto setDataReturn(
-            @RequestBody RentalReturnRequestDto rentalReturnRequestDto) {
+            @RequestBody @Valid RentalReturnRequestDto rentalReturnRequestDto) {
         return rentalService.setDataReturn(rentalReturnRequestDto);
     }
 

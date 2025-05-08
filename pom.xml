@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.4</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
+
     <groupId>mate.academy</groupId>
     <artifactId>car-sharing</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>car-sharing</name>
     <description>car-sharing</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+
     <properties>
-        <maven.checkstyle.plugin.configLocation>checkstyle.xml</maven.checkstyle.plugin.configLocation>
         <java.version>17</java.version>
         <jjwt.version>0.12.6</jjwt.version>
+        <springdoc.version>2.8.6</springdoc.version>
+        <telegrambots.version>6.9.7.1</telegrambots.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <lombok.version>1.18.30</lombok.version>
+        <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
+        <maven.compiler.plugin.version>3.12.1</maven.compiler.plugin.version>
+        <maven.checkstyle.plugin.version>3.3.0</maven.checkstyle.plugin.version>
+        <checkstyle.config.location>checkstyle.xml</checkstyle.config.location>
+        <stripe.version>28.0.0</stripe.version>
+        <testcontainers.version>1.20.6</testcontainers.version>
+        <validation.version>3.4.5</validation.version>
+        <spring-framework.version>6.2.5</spring-framework.version>
+        <spring-security.version>6.4.4</spring-security.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -47,7 +53,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.3.0</version>
+            <version>${springdoc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
@@ -56,7 +62,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-spring-boot-starter</artifactId>
-            <version>6.9.7.1</version>
+            <version>${telegrambots.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -90,12 +96,12 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.6.3</version>
+            <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
-            <version>1.6.3</version>
+            <version>${mapstruct.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -118,18 +124,24 @@
         <dependency>
             <groupId>com.stripe</groupId>
             <artifactId>stripe-java</artifactId>
-            <version>28.0.0</version>
+            <version>${stripe.version}</version>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>mysql</artifactId>
-            <version>1.20.6</version>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+            <version>${validation.version}</version>
         </dependency>
     </dependencies>
 
@@ -138,15 +150,30 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
                 <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok.mapstruct.binding.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -159,53 +186,11 @@
                     </excludes>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <configLocation>checkstyle.xml</configLocation>
-                    <failOnViolation>true</failOnViolation>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.12.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>1.18.30</version>
-                        </path>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>1.6.3</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>0.2.0</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>${maven.checkstyle.plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -215,7 +200,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <configLocation>${maven.checkstyle.plugin.configLocation}</configLocation>
+                    <configLocation>${checkstyle.config.location}</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>

@@ -8,7 +8,7 @@ import jakarta.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
-import mate.academy.carsharing.exceptions.StripePaymentException;
+import mate.academy.carsharing.exception.StripePaymentException;
 import mate.academy.carsharing.model.Payment;
 import mate.academy.carsharing.model.Rental;
 import org.springframework.beans.factory.annotation.Value;

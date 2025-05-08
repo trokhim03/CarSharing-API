@@ -7,8 +7,8 @@ import java.time.temporal.ChronoUnit;
 import lombok.RequiredArgsConstructor;
 import mate.academy.carsharing.dto.payment.PaymentRequestDto;
 import mate.academy.carsharing.dto.payment.PaymentResponseDto;
-import mate.academy.carsharing.exceptions.EntityNotFoundException;
-import mate.academy.carsharing.exceptions.PaymentException;
+import mate.academy.carsharing.exception.EntityNotFoundException;
+import mate.academy.carsharing.exception.PaymentException;
 import mate.academy.carsharing.mapper.PaymentMapper;
 import mate.academy.carsharing.model.Payment;
 import mate.academy.carsharing.model.Rental;
@@ -36,7 +36,6 @@ public class PaymentServiceImpl implements PaymentService {
     public Page<PaymentResponseDto> getWithUserId(Pageable pageable, Long userId) {
         return paymentRepository.findAllByRental_UserId(pageable, userId)
                 .map(paymentMapper::toDto);
-
     }
 
     @Override
@@ -62,7 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setSessionId("none");
         payment.setSessionUrl("http://none.none");
 
-        payment = paymentRepository.save(payment);
+        paymentRepository.save(payment);
 
         Session paymentSession = stripePaymentService
                 .createPaymentSession(payment, rental, amountToPay);
@@ -82,17 +81,18 @@ public class PaymentServiceImpl implements PaymentService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find payment by id: " + paymentId));
 
-        if (payment.getStatus() == Payment.Status.PAID) {
-            return;
-        }
+        Payment.Status oldStatus = payment.getStatus();
+        Payment.Status newStatus = stripePaymentService.checkPaymentStatus(payment.getSessionId());
 
-        Payment.Status status = stripePaymentService
-                .checkPaymentStatus(payment.getSessionId());
-        payment.setStatus(status);
-        String message = notificationMessageService
-                .createSuccessfulPaymentNotification(payment);
-        notificationService.sendNotification(message);
-        paymentRepository.save(payment);
+        if (oldStatus != newStatus) {
+            payment.setStatus(newStatus);
+            paymentRepository.save(payment);
+        }
+        if (newStatus == Payment.Status.PAID) {
+            String message = notificationMessageService
+                    .createSuccessfulPaymentNotification(payment);
+            notificationService.sendNotification(message);
+        }
     }
 
     private Payment.Type determinePaymentType(Rental rental) {
