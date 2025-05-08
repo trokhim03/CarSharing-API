@@ -58,11 +58,22 @@ Explore the API endpoints with Swagger UI:
 
 **🔗 [Swagger UI](http://localhost:8080/swagger-ui/index.html)**
 
+## 🔒 Security
+- JWT authentication for all endpoints
+
+- Role-based authorization
+
+- Password encryption
+
+- Secure payment processing with Stripe
+
+- All sensitive data stored in environment variables
+  
 ## 📌 Example API Requests
 **Register a new user:**
 
 ```bash
-curl -X POST "http://localhost:8080/api/register" \
+curl -X POST "http://localhost:8080/api/auth/registration" \
 -H "Content-Type: application/json" \
 -d '{
     "email": "user@example.com",
