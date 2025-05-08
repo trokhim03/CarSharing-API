@@ -56,7 +56,9 @@ The project provides a comprehensive set of features for managing cars, users, r
 
 Explore the API endpoints with Swagger UI:
 
-**🔗 [Swagger UI](http://localhost:8080/swagger-ui/index.html)**
+**🔗 [Swagger UI](http://localhost:8080/api/swagger-ui/index.html)**
+
+<img width="1685" alt="Знімок екрана 2025-05-08 о 14 10 15" src="https://github.com/user-attachments/assets/d94f00a9-a52d-4fe0-9211-ff314faf3b84" />
 
 ## 🔒 Security
 - JWT authentication for all endpoints
