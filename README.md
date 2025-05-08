@@ -136,10 +136,10 @@ curl -X POST "http://localhost:8080/api/auth/registration" \
 -H "Content-Type: application/json" \
 -d '{
     "email": "user@example.com",
-    "firstName": "John",
-    "lastName": "Doe",
     "password": "securePassword123",
-    "repeatPassword": "securePassword123"
+    "repeatPassword": "securePassword123",
+    "firstName": "John",
+    "lastName": "Doe"
 }'
 ```
 
