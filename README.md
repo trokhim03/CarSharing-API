@@ -52,6 +52,63 @@ The project provides a comprehensive set of features for managing cars, users, r
 
 
 ## 🚀 Getting Started
+
+1️⃣ **Setup**
+
+Clone the repository:
+
+```bash
+git clone https://github.com/trokhim03/CarSharing-API.git
+```
+2️⃣ **Сreate an environment of variables**
+
+Create file .env by copying the content from file .env.sample and fill in the fields.
+
+3️⃣ **Build the project:**
+```bash
+docker build -t name_image_your_app
+```
+4️⃣ **Start the application using Docker Compose:**
+```bash
+docker-compose up
+```
+
+## Connecting to a Custom Database 🗄
+Configure your database connection and application settings by editing the src/main/resources/application.properties file.
+
+```bash
+# Application
+spring.application.name=car-sharing
+server.servlet.context-path=/api
+
+# Database
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+
+# JWT
+jwt.secret=${JWT_SECRET}
+jwt.expiration=${JWT_EXPIRATION}
+
+# Stripe
+stripe.secret.key=${STRIPE_SECRET_KEY}
+stripe.public.key=${STRIPE_PUBLIC_KEY}
+stripe.success.url=${STRIPE_SUCCESS_URL}
+stripe.cancel.url=${STRIPE_CANCEL_URL}
+
+# Telegram
+telegram.bot.name=${TELEGRAM_BOT_NAME}
+telegram.bot.token=${TELEGRAM_BOT_TOKEN}
+telegram.bot.chat.id=${TELEGRAM_CHAT_ID}
+```
+The application will be available at http://localhost:8080 (default port)
+
 ## 📖 API Documentation
 
 Explore the API endpoints with Swagger UI:
