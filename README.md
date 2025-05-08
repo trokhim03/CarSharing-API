@@ -1,29 +1,9 @@
-# 🚗 Car Sharing Service
+# 🚗 Car Sharing API
 
-Modern car sharing platform that automates rental processes with secure payments and real-time notifications.
-
-## 🌟 Features
-
-- **User Management**
-  - JWT authentication & role-based access (MANAGER | CUSTOMER)
-  - Profile management
-
-- **Car Inventory**
-  - CRUD operations for cars (MANAGER only)
-  - Public catalog with availability tracking
-
-- **Rental System**
-  - Book cars with automatic inventory adjustment
-  - Rental history with filters (active/returned)
-  - Secure return process
-
-- **Payments**
-  - Stripe integration for credit card payments
-  - Automatic fee calculation (rentals & fines)
-  - Payment session tracking
-
-- **Notifications**
-  - Telegram bot for real-time alerts
-  - Daily overdue rental checks
-
-## 🛠 Tech Stack
+This API provides a modern car sharing platform that automates vehicle rental processes with secure payments and real-time notifications. Designed as a complete digital solution for car rental businesses, it replaces manual operations with an efficient web-based system featuring automated inventory management, rental tracking, and integrated payment processing.
+## 📌 Technologies & Tools
+## ⚡ Functionality
+## 📊 Database Schema
+## 🛠️ Setting up a project
+## 📖 API Documentation
+## 📌 Example API Request
