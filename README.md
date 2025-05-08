@@ -41,12 +41,10 @@ The project provides a comprehensive set of features for managing cars, users, r
 - Success/cancel payment handlers
 - Fine calculation for overdue rentals
 
-**🔔 Notification System**
-- Telegram notifications for:
-  - New rentals
-  - Overdue rentals
-  - Successful payments
-- Scheduled daily checks for overdue rentals
+**🔔 Telegram notifications**
+- New rentals
+- Overdue rentals
+- Successful payments
 
 ## 📊 Database Schema
 
@@ -54,3 +52,30 @@ The project provides a comprehensive set of features for managing cars, users, r
 
 
 ## 🚀 Getting Started
+## 📖 API Documentation
+
+Explore the API endpoints with Swagger UI:
+
+**🔗 [Swagger UI](http://localhost:8080/swagger-ui/index.html)**
+
+## 📌 Example API Requests
+**Register a new user:**
+
+```bash
+curl -X POST "http://localhost:8080/api/register" \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "user@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "password": "securePassword123",
+    "repeatPassword": "securePassword123"
+}'
+```
+
+**Get available cars:**
+
+```bash
+curl -X GET "http://localhost:8080/api/cars" \
+-H "Authorization: Bearer your.jwt.token"
+```
