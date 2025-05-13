@@ -17,14 +17,23 @@ import mate.academy.carsharing.repository.RentalRepository;
 import mate.academy.carsharing.service.payment.stripe.StripePaymentService;
 import mate.academy.carsharing.service.telegram.NotificationMessageService;
 import mate.academy.carsharing.service.telegram.NotificationService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
     private static final BigDecimal DAILY_FINE_MULTIPLIER = BigDecimal.valueOf(1.4);
+
+    @Value("${payment.session-id}")
+    private String defaultSessionId;
+
+    @Value("${payment.session-url}")
+    private String defaultSessionUrl;
+
     private final PaymentRepository paymentRepository;
     private final StripePaymentService stripePaymentService;
     private final PaymentMapper paymentMapper;
@@ -39,43 +48,25 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Transactional
     public PaymentResponseDto createPayment(PaymentRequestDto paymentRequestDto) {
-        Rental rental = rentalRepository.findById(paymentRequestDto.getRentalId())
-                .orElseThrow(() -> new EntityNotFoundException("Can't find rental by id:"
-                        + paymentRequestDto.getRentalId()));
-
+        Rental rental = getRentalById(paymentRequestDto.getRentalId());
         Payment.Type type = determinePaymentType(rental);
-
-        if (paymentRepository.existsByRentalIdAndStatus(rental.getId(), Payment.Status.PENDING)) {
-            throw new PaymentException("Active payment already exists for this rental");
-        }
+        checkActivePaymentExists(rental.getId());
 
         BigDecimal amountToPay = calculateAmountToPay(rental, type);
-
-        Payment payment = new Payment();
-        payment.setRental(rental);
-        payment.setType(type);
-        payment.setStatus(Payment.Status.PENDING);
-        payment.setAmountToPay(amountToPay);
-        payment.setSessionId("none");
-        payment.setSessionUrl("http://none.none");
-
-        paymentRepository.save(payment);
+        Payment payment = createPendingPayment(rental, type, amountToPay);
 
         Session paymentSession = stripePaymentService
                 .createPaymentSession(payment, rental, amountToPay);
-
         stripePaymentService.setPaymentSessionUrl(payment, paymentSession);
+
         payment.setSessionId(paymentSession.getId());
-        String message = notificationMessageService
-                .createPaymentNotification(payment, rental, rental.getCar());
-        notificationService.sendNotification(message);
+        notifyAboutPaymentCreation(payment, rental);
+
         return paymentMapper.toDto(paymentRepository.save(payment));
     }
 
     @Override
-    @Transactional
     public void checkSuccessfulPayment(Long paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -89,10 +80,43 @@ public class PaymentServiceImpl implements PaymentService {
             paymentRepository.save(payment);
         }
         if (newStatus == Payment.Status.PAID) {
-            String message = notificationMessageService
-                    .createSuccessfulPaymentNotification(payment);
-            notificationService.sendNotification(message);
+            notifyAboutSuccessfulPayment(payment);
         }
+    }
+
+    private Rental getRentalById(Long rentalId) {
+        return rentalRepository.findById(rentalId)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find rental"
+                        + " by id:" + rentalId));
+    }
+
+    private void checkActivePaymentExists(Long rentalId) {
+        if (paymentRepository.existsByRentalIdAndStatus(rentalId, Payment.Status.PENDING)) {
+            throw new PaymentException("Active payment already exists for this rental");
+        }
+    }
+
+    private Payment createPendingPayment(Rental rental, Payment.Type type, BigDecimal amountToPay) {
+        Payment payment = new Payment();
+        payment.setRental(rental);
+        payment.setType(type);
+        payment.setStatus(Payment.Status.PENDING);
+        payment.setAmountToPay(amountToPay);
+        payment.setSessionId(defaultSessionId);
+        payment.setSessionUrl(defaultSessionUrl);
+        return paymentRepository.save(payment);
+    }
+
+    private void notifyAboutPaymentCreation(Payment payment, Rental rental) {
+        String message = notificationMessageService
+                .createPaymentNotification(payment, rental, rental.getCar());
+        notificationService.sendNotification(message);
+    }
+
+    private void notifyAboutSuccessfulPayment(Payment payment) {
+        String message = notificationMessageService
+                .createSuccessfulPaymentNotification(payment);
+        notificationService.sendNotification(message);
     }
 
     private Payment.Type determinePaymentType(Rental rental) {

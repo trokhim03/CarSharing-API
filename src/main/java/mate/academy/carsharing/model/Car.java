@@ -39,7 +39,7 @@ public class Car {
 
     private int inventory;
 
-    @Column(name = "daily_fee", nullable = false)
+    @Column(nullable = false)
     private BigDecimal dailyFee;
 
     @Column(nullable = false)

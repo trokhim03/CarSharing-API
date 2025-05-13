@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -39,6 +40,46 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put(ERRORS_LABEL, errors);
 
         return new ResponseEntity<>(body, headers, status);
+    }
+
+    @ExceptionHandler(CarNotAvailableException.class)
+    public ResponseEntity<Object> handleCarNotAvailableException(CarNotAvailableException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<Object> handlePaymentException(PaymentException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(RegistrationException.class)
+    public ResponseEntity<Object> handleRegistrationException(RegistrationException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(StripePaymentException.class)
+    public ResponseEntity<Object> handleStripePaymentException(StripePaymentException ex) {
+        return buildResponse(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+    }
+
+    @ExceptionHandler(TelegramNotificationException.class)
+    public ResponseEntity<Object> handleTelegramNotificationException(
+            TelegramNotificationException ex
+    ) {
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+    }
+
+    private ResponseEntity<Object> buildResponse(HttpStatus status, String message) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIME_LABEL, LocalDateTime.now());
+        body.put(STATUS_LABEL, status);
+        body.put(ERRORS_LABEL, List.of(message));
+        return new ResponseEntity<>(body, status);
     }
 
     private Object getErrorMessage(ObjectError e) {

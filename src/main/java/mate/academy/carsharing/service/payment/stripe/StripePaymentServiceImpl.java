@@ -51,6 +51,29 @@ public class StripePaymentServiceImpl implements StripePaymentService {
         }
     }
 
+    @Override
+    public void setPaymentSessionUrl(Payment payment, Session session) {
+        payment.setSessionUrl(session.getUrl());
+    }
+
+    @Override
+    public Payment.Status checkPaymentStatus(String sessionId) {
+        try {
+            Session session = Session.retrieve(sessionId);
+            return mapStripeStatusToPaymentStatus(session.getStatus());
+        } catch (StripeException e) {
+            throw new StripePaymentException("Failed to check payment status", e);
+        }
+    }
+
+    private Payment.Status mapStripeStatusToPaymentStatus(String status) {
+        return switch (status) {
+            case "complete", "succeeded", "paid" -> Payment.Status.PAID;
+            case "pending", "canceled", "failed" -> Payment.Status.PENDING;
+            default -> throw new IllegalStateException("Unexpected value: " + status);
+        };
+    }
+
     private Long calculateExpirationTime() {
         return Instant.now()
                 .plusSeconds(SESSION_EXPIRATION_HOURS * 60 * 60)
@@ -74,28 +97,5 @@ public class StripePaymentServiceImpl implements StripePaymentService {
 
     private Long convertToCents(BigDecimal amount) {
         return amount.multiply(BigDecimal.valueOf(100)).longValue();
-    }
-
-    @Override
-    public void setPaymentSessionUrl(Payment payment, Session session) {
-        payment.setSessionUrl(session.getUrl());
-    }
-
-    @Override
-    public Payment.Status checkPaymentStatus(String sessionId) {
-        try {
-            Session session = Session.retrieve(sessionId);
-            return mapStripeStatusToPaymentStatus(session.getStatus());
-        } catch (StripeException e) {
-            throw new StripePaymentException("Failed to check payment status", e);
-        }
-    }
-
-    private Payment.Status mapStripeStatusToPaymentStatus(String status) {
-        return switch (status) {
-            case "complete", "succeeded", "paid" -> Payment.Status.PAID;
-            case "pending", "canceled", "failed" -> Payment.Status.PENDING;
-            default -> throw new IllegalStateException("Unexpected value: " + status);
-        };
     }
 }
