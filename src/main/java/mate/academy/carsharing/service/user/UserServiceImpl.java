@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto register(UserRegistrationRequestDto userRegistrationRequestDto)
             throws RegistrationException {
         if (userRepository.existsByEmail(userRegistrationRequestDto.getEmail())) {
-            throw new RegistrationException("Can't registration user "
+            throw new RegistrationException("Can't register user "
                     + "with existing email: " + userRegistrationRequestDto.getEmail());
 
         }

@@ -106,7 +106,7 @@ class UserServiceImplTest {
         RegistrationException exception = assertThrows(RegistrationException.class,
                 () -> userService.register(userRequestDto));
 
-        assertEquals("Can't registration user with existing email: " + userRequestDto.getEmail(),
+        assertEquals("Can't register user with existing email: " + userRequestDto.getEmail(),
                 exception.getMessage());
     }
 
