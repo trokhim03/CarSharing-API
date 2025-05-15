@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users
+      author: trokhim
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "customer@example.com"
+              - column:
+                  name: first_name
+                  value: "John"
+              - column:
+                  name: last_name
+                  value: "Doe"
+              - column:
+                  name: password
+                  value: "$2a$10$P/QlrPsxZ9AKvvl24zQ5W.WCPL.LmI//508AJnbn4nMZmbr9IWIJG" # password = "12345678"
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+        - insert:
+                  tableName: users
+                  columns:
+                    - column:
+                        name: email
+                        value: "manager@example.com"
+                    - column:
+                        name: first_name
+                        value: "Jane"
+                    - column:
+                        name: last_name
+                        value: "Smith"
+                    - column:
+                        name: password
+                        value: "$2a$10$P/QlrPsxZ9AKvvl24zQ5W.WCPL.LmI//508AJnbn4nMZmbr9IWIJG" # password = "12345678"
+                    - column:
+                        name: is_deleted
+                        valueBoolean: false

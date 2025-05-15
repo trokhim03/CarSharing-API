@@ -1,0 +1,70 @@
+
+databaseChangeLog:
+  - changeSet:
+      id: create-payments-table
+      author: trokhim
+      runOnChange: true
+      changes:
+        - createTable:
+            tableName: payments
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rental_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: session_url
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: session_id
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount_to_pay
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_deleted
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValueBoolean: false
+
+  - changeSet:
+      id: add-foreign-keys-payments
+      author: trokhim
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_payments_rental
+            baseColumnNames: rental_id
+            baseTableName: payments
+            referencedTableName: rentals
+            referencedColumnNames: id
+            onDelete: cascade
+        - addUniqueConstraint:
+            tableName: payments
+            columnNames: rental_id
+            constraintName: uc_payments_rental_id
